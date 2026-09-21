@@ -1,0 +1,48 @@
+version: '3.9'
+services:
+  app:
+    image: dockerfile
+    ports:
+      - "9090:9090"
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+      start_period: 20s
+
+  hsqldb-db:
+    image: blacklabelops/hsqldb:latest
+    container_name: hsqldb-db
+    restart: unless-stopped
+    environment:
+      HSQLDB_DATABASE_NAME: testdb
+      HSQLDB_USER: user
+      HSQLDB_PASSWORD: user
+    ports:
+      - "9001:9001"   # HSQLDB web console
+      - "9002:9002"   # HSQLDB JDBC port
+    volumes:
+      - hsqldb_data:/opt/hsqldb/data
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "9002"]
+      interval: 10s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  mysql_data:
+  hsqldb_data:
+

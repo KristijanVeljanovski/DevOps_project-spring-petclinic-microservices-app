@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod
+  namespace: projnamespace
+  labels:
+    topic: confmap
+
+spec:
+  volumes:
+    - name: configmap-volume
+      configMap:
+        name: confmap
+
+  containers:
+    - name: boring-austin
+      image: dockerfile
+      volumeMounts:
+        - name: configmap-volume
+          mountPath: /spring-petclinic-microservices-main/spring-petclinic-microservices-main/testconfigmap
+          readOnly: true

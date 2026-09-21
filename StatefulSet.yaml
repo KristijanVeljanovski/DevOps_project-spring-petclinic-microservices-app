@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: statefulset
+  namespace: projnamespace
+spec:
+  serviceName: service
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: spring-petclinic-microservices-main
+
+  template:
+    metadata:
+      labels:
+        app: spring-petclinic-microservices-main
+    spec:
+      containers:
+        - name: boring-austin
+          image: dockerfile
+          ports:
+            - name: http
+              containerPort: 9090
+              protocol: TCP
+          volumeMounts:
+            - name: vlmSpring
+              mountPath: /spring-petclinic-microservices-main/spring-petclinic-microservices-main
+
+  volumeClaimTemplates:
+    - metadata:
+        name: vlmSpring
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: standard
+        resources:
+          requests:
+            storage: 10Mi
+

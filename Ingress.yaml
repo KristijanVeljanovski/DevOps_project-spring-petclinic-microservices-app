@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress
+  namespace: projnamespace
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /spring-petclinic-microservices-main/spring-petclinic-microservices-main/testconfigmap
+            pathType: Prefix
+            backend:
+              service:
+                name: service
+                port:
+                  number: 80

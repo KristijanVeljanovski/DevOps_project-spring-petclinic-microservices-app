@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: confmap
+  namespace: projnamespace
+data:
+  given: kv
+  family: kv
+  test.conf: |
+    env = */spring-petclinic-microservices-main/spring-petclinic-microservices/testconfigmap
+    endpoint = 1.1.1.1
+    char = base64
+    vault = hashicorp
+    log-size = 1024M

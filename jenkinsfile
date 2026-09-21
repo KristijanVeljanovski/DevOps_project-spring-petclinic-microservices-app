@@ -1,0 +1,27 @@
+pipeline {
+	agent any
+	stages {
+		stage('Build') {
+			steps {
+				sh "docker attach boring_austin"
+				sh "docker start boring_austin"
+				sh "docker inspect boring_austin"
+				sh "docker build -t dockerfile ."
+			} 
+		}
+		stage('Run'){
+			steps {
+				sh "docker run -t -i --name boring_austin manoharms/spring-boot /bin/bash"
+				sh "docker run -d -p 9090:9090 -v .:/spring-petclinic-microservices-main --name manoharms/springboot spring-petclinic-microservices-main ConfigServerApplication.java"
+				sh "docker-compose up"
+			}
+		}
+		stage('Test'){
+			steps {
+				sh "docker logs boring_austin"
+				sh "docker-compose logs"
+				sh "docker-compose ps"
+			}
+		}
+	}
+}
